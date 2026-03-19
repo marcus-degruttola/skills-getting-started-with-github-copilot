@@ -38,9 +38,44 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Basketball Team": {
+        "description": "Compete in basketball games and tournaments",
+        "schedule": "Mondays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 15,
+        "participants": ["alex@mergington.edu"]
+    },
+    "Soccer Club": {
+        "description": "Join our soccer team for practices and matches",
+        "schedule": "Tuesdays and Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 18,
+        "participants": ["jordan@mergington.edu", "casey@mergington.edu"]
+    },
+    "Drama Club": {
+        "description": "Perform in theatrical productions and improve acting skills",
+        "schedule": "Wednesdays and Saturdays, 2:00 PM - 4:00 PM",
+        "max_participants": 25,
+        "participants": ["taylor@mergington.edu"]
+    },
+    "Art Studio": {
+        "description": "Create paintings, sculptures, and other artistic works",
+        "schedule": "Mondays and Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 16,
+        "participants": ["morgan@mergington.edu", "riley@mergington.edu"]
+    },
+    "Debate Team": {
+        "description": "Develop public speaking skills and compete in debate competitions",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 12,
+        "participants": ["avery@mergington.edu"]
+    },
+    "Robotics Club": {
+        "description": "Build and program robots for competitions",
+        "schedule": "Wednesdays and Fridays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["cameron@mergington.edu", "blake@mergington.edu", "drew@mergington.edu"]
     }
 }
-
 
 @app.get("/")
 def root():
@@ -61,6 +96,14 @@ def signup_for_activity(activity_name: str, email: str):
 
     # Get the specific activity
     activity = activities[activity_name]
+
+    # Check if already registered
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="You are already registered for this activity")
+    
+    # Check if activity is full
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is at maximum capacity")
 
     # Add student
     activity["participants"].append(email)
